@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html xmlns:th="http://thymeleaf.org">
+<head>
+<meta charset="ISO-8859-1">
+<link th:href="@{/css/bootstrap.min.css}" rel="stylesheet">
+<!-- <link th:href="@{/bootstrap-table-master/dist/bootstrap-table.min.css}" rel="stylesheet"> -->
+<link th:href="@{/fontawesome-free-6.1.1-web/css/all.min.css}" rel="stylesheet">
+
+<script type="text/javascript" src="/js/jquery-3.6.0.min.js"></script>
+<script type="text/javascript" src="/fontawesome-free-6.1.1-web/js/fontawesome.min.js"></script>
+<script type="text/javascript" src="/booker/book.js"></script>
+<script type="text/javascript" src="/js/bootstrap.min.js"></script>
+<title>Cleteci tryout</title>
+</head>
+<body>
+<nav class="navbar navbar-light bg-light mb-4" style="background-color: #4B5D67 !important;">
+  <div class="container-fluid">
+    <a class="navbar-brand" href="#">
+      <img src="/img/book.webp" alt="" width="30" height="24" class="d-inline-block align-text-top">
+      <span style="color:#BDF2D5 !important;">Library</span>
+    </a>
+  </div>
+</nav>
+<div class="container">
+<div class="row">
+<div class="col-6 ">
+<div class="card">
+  <div class="card-header">
+    Book management
+  </div>
+<form class="form-floating p-4" method="POST" action="/addBook" th:object="${book}">
+<div class="form-floating mb-1" style="height: 50px;">
+  <input type="text" th:field="${book.ISBN}" class="form-control  h-50" id="floatingInput" placeholder="ISBN">
+  <label for="floatingInput" style="padding-top: .2rem;">ISBN</label>
+</div>
+<div class="form-floating mb-1" style="height: 50px;">
+  <input type="text" th:field="${book.title}" class="form-control  h-50" id="floatingInput" placeholder="Title">
+  <label for="floatingInput" style="padding-top: .2rem;">Title</label>
+</div>
+<div class="container" style="height: 50px;" th:object=${authorsId}>
+  <!-- <input type="text" th:field="*{authors}" class="form-control  h-50" id="floatingInput" placeholder="Authors">
+  <label for="floatingInput" style="padding-top: .2rem;">Authors</label> -->
+  <label class="" for="flexSwitchCheckDefault" style="margin-left: -1rem;">Authors</label>
+  <div class="row">
+	  <div class="form-check form-switch col-5" th:each="author : ${authors}">
+		<input class="form-check-input" type="checkbox" id="flexSwitchCheckDefault" th:field="*{authorsId}" th:value="${author.id}">
+		<label class="form-check-label" for="flexSwitchCheckDefault" >
+		[[|${author.nombre} ${author.apellido}|]]</label>
+	  </div>
+  </div>
+	
+  
+</div>
+
+<div class="form-floating mb-1" style="height: 50px;">
+  <input type="text" th:field="${book.numPgs}" class="form-control  h-50" id="floatingInput" placeholder="Number of pages">
+  <label for="floatingInput" style="padding-top: .2rem;">Number of pages</label>
+</div>
+<div class="form-floating mb-1" style="height: 50px;">
+  <input type="text" th:field="${book.publisher.name}" class="form-control  h-50" id="floatingInput" placeholder="Publisher">
+  <label for="floatingInput" style="padding-top: .2rem;">Publisher</label>
+</div>
+<button type="submit" class="btn btn-primary btn-sm">Add book</button>
+</form>
+</div>
+</div>
+<div class="col-6 ">
+<table class="table table-bordered">
+<thead>
+<tr>
+<td>ISBN</td>
+<td>Title</td>
+<td>Author</td>
+<td>Publisher</td>
+<td>Management</td>
+</tr>
+</thead>
+<tbody>
+<tr th:each="book,iter : ${books}">
+<td th:text="${book.ISBN}">---</td>
+<td th:text="${book.title}">---</td>
+<td> 
+	<span th:each="author : ${book.authors}"><p th:text="${author.nombre}"></p></span>
+</td>
+<td th:text="${book.publisher.name}">---</td>
+<td >
+	<div class="container-fluid">
+		<div class="row">
+			<div class="col-6">
+				<a style="cursor: pointer;" th:id="'edit.'+${iter.index}"><i class="fa-solid fa-pencil" ></i></a>
+				<input type="hidden" th:value="${book.id}" >
+			</div>
+			<div class="col-6">
+				<a style="cursor: pointer;" th:id="'delete.'+${iter.index}" ><i class="fa-solid fa-trash"></i></a>
+				<input type="hidden" th:value="${book.id}" >
+			</div>
+		</div>
+	</div>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+
+</body>
+</html>
